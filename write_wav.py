@@ -3,7 +3,9 @@ import serial
 import numpy as np
 from tqdm import tqdm
 
-freq, arr = wavfile.read("jingle16.wav")
+infile = "jingle16.wav"
+infile = "cotton.wav"
+freq, arr = wavfile.read(infile)
 
 arr = arr.astype("float")
 arr = arr / np.std(arr)
@@ -14,10 +16,12 @@ def s(sig = 2.5):
 
 s8 = [t[0] for t in s(5)]
 
-N = 1000000
-b = 3
+b = 9
+N = min(1101710, len(s8) // b)
+print(f"copying {N / (len(s8) // b)} of file")
 with open("src/song.h", "w") as f:
     f.write("//#include <Arduino.h>\n\n")
+    f.write(f"#define song_step {int(1_000_000 / (freq/b))}\n")
     f.write(f"#define song_len {N}\n")
     f.write("const uint8_t PROGMEM song[song_len] {\n")
     for i in range(N-1):

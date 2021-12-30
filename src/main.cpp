@@ -16,6 +16,6 @@ void loop() {
   //digitalWrite(LED, HIGH);
   for (long i = 0; i < song_len; ++i){
     dacWrite(DAC1, song[i]);
-    delayMicroseconds(60);
+    delayMicroseconds(song_step);
   }
 }
